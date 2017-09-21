@@ -1,0 +1,53 @@
+#canvas {
+	position: relative;
+	height: 400px;
+	width: 94%;
+	margin: 50px 3%;
+	background-color: #333;
+}
+
+.maldonado {
+	position: absolute;
+	height: 24px;
+	width: 24px;
+	background: url(santiago.png) 0px 0px;
+}
+
+.gendarme {
+	position: absolute;
+	height: 48px;
+	width: 48px;
+	background: url(gendarme.png) 0px 0px;
+}
+
+#menu {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	background-image: url(menu.png);
+}
+
+.StartGame {
+	background-position: 0px 0px;
+}
+
+.Options {
+	background-position: 120px 0px;
+}
+
+.Credits {
+	background-position: 60px 0px;
+}
+
+#points {
+	position: absolute;
+	left: 50px;
+	bottom: 20px;
+	width: 50px;
+	font: 'Courier New';
+	font-weight: bold;
+	font-size: 30px;
+	text-align: center;
+	colour: white;
+	letter-spacing: 2px;
+}
