@@ -2,18 +2,18 @@ class Utilities {
 
 	//Checks for collision between two rectangles
 	static isColliding(objA, objB) { 
-  		let left = objA.X < (objB.X + objB.elementWidth);
-  		let rigth = (objA.X + objA.elementWidth) > objB.X;
-  		let top = objA.Y < (objB.Y + objB.elementHeight);
-  		let bottom = (objA.Y + objA.elementHeight) > objB.Y;
+  		let left = objA.start_x < objB.end_x;
+  		let rigth = objA.end_x > objB.start_x;
+  		let top = objA.start_y < objB.end_y;
+  		let bottom = objA.end_y > objB.start_y;
   		return left && rigth && top && bottom;
 	};
 
 	static willColideWith(x,y,width,height,objB) {
-		let left = x < (objB.X + objB.elementWidth);
-		let right = (x+width) > objB.X;
-		let top = y < (objB.Y + objB.elementHeight);
-		let bottom = (y+top) > objB.Y;
+		let left = x < objB.end_x;
+		let right = (x+width) > objB.start_x;
+		let top = y < objB.end_y;
+		let bottom = (y+top) > objB.start_y;
 		return left && right && top && bottom;
 	}
 

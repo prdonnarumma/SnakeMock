@@ -1,11 +1,45 @@
 class Gendarme extends Entity {
 
-	constructor(x,y,id) {
+	constructor(x,y) {
 		super(x,y)
 		this._class = "gendarme";
-		super.createObjectElement(id);
-		super.fillObjectElement();
-		this._direction = "Right";
+		this._direction = "Right"; //Always right
+		this.loaded = false;
+		this._src = "images/gendarme.png";
+		this._sound_src = null;
+		this._sprite_frame_count_max = 2;
+		this._sprite_change_per_frame = 5.0;
+		super.initAssets();
+	};
+
+	draw(ctx) {
+		var cur_frame = this._sprite_frame_count/this._sprite_change_per_frame;
+
+		if ((cur_frame%1) == 0) { //if current frame is an integer
+			var source_x = cur_frame*this._width;
+		} else {
+			var old_sprite_frame = parseInt(cur_frame);
+			var source_x = old_sprite_frame*this._width;
+		}
+		//Add changes due to behaviour of character, for example mirroring when going to the left
+
+		ctx.save();
+		ctx.translate(this.X,this.Y);
+		ctx.translate(this._width/2, this._height/2);
+
+		ctx.drawImage(
+          this.sprite,
+          source_x,
+          0,
+          this._width,
+          this._height,
+          -this._width/2,
+          -this._height/2,
+          this._width,
+          this._height
+        );
+
+      ctx.restore();
 	};
 
 	move() {
@@ -14,48 +48,47 @@ class Gendarme extends Entity {
 	};
 
 	moveRight() {
-		let _gameRight = parseInt(this.element.parentElement.clientWidth) - parseInt(this.elementWidth);
+		let _gameRight = parseInt(this._canvas.width) - parseInt(this._width);
 		let _gameLeft = 0;
-		if (this.X + 30 > _gameRight) {
+		if (this.X + 2 > _gameRight) {
 			this.X = _gameLeft;
 		} else {
-			this.X += 30;
+			this.X += 2;
 		};
 	};
 
 	moveLeft() {
-		let _gameRight = parseInt(this.element.parentElement.clientWidth) - parseInt(this.elementWidth);
+		let _gameRight = parseInt(this._canvas.width) - parseInt(this._width);
 		let _gameLeft = 0;
-		if (this.X - 30 < _gameLeft) { 
+		if (this.X - 2 < _gameLeft) { 
 			this.X = _gameRight;
 		} else {
-			this.X -= 30;
+			this.X -= 2;
 		}
 	};
 
 	moveUp() {
-		let _gameBottom = parseInt(this.element.parentElement.clientHeight) - parseInt(this.elementHeight);
+		let _gameBottom = parseInt(this._canvas.height) - parseInt(this._height);
 		let _gameTop = 0;
-		if (this.Y - 30 < _gameTop) {
+		if (this.Y - 2 < _gameTop) {
 			this.Y = _gameBottom;
 		} else {
-			this.Y -= 30;
+			this.Y -= 2;
 		}
 	};
 
 	moveDown() {
-		let _gameBottom = parseInt(this.element.parentElement.clientHeight) - parseInt(this.elementHeight);
+		let _gameBottom = parseInt(this._canvas.height) - parseInt(this._height);
 		let _gameTop = 0;
-		if (this.Y+30 > _gameBottom) {
+		if (this.Y+2 > _gameBottom) {
 			this.Y = _gameTop;
 		} else {
-			this.Y += 30;
+			this.Y += 2;
 		}
 	};
 
 	update(input) {
-		if (typeof input === 'undefined') {}
-		else if (typeof input !== 'number') { throw new Error('invalid input'); }
+		if (typeof input !== 'number') {}
 		else {
 			switch(input) {
 			case 38:
@@ -69,8 +102,6 @@ class Gendarme extends Entity {
 				break;
 			case 37:
 				this.direction = 'Left';
-				break;
-			default:
 				break;
 			}
 		}

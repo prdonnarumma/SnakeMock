@@ -2,26 +2,22 @@
 <html>
 <head>
 	<title>Gendarmería</title>
-	<link rel="stylesheet" type="text/css" href="reset.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script type="text/javascript" src="js/GameMaster.js"></script>
-	<script type="text/javascript" src="js/Utilities class.js"></script>
-	<script type="text/javascript" src="js/Points class.js"></script>
-	<script type="text/javascript" src="js/Menu class.js"></script>
-	<script type="text/javascript" src="js/Entity class.js"></script>
-	<script type="text/javascript" src="js/Canvas class.js"></script>
-	<script type="text/javascript" src="js/Maldonado class.js"></script>
-	<script type="text/javascript" src="js/Gendarme class.js"></script>	
-	<!--<script type="text/javascript" src="app.js"></script>
-	<script type="text/javascript" src="maldonado.js"></script>
-	<script type="text/javascript" src="collision.js"></script>
-	<script type="text/javascript" src="gendarme.js"></script>
-	<script type="text/javascript" src="canvas.js"></script>
-	<script type="text/javascript" src="points.js"></script>-->
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 <head>
 <body>
-	<div id="gendarmeTemplate" style="display: none; background: url(gendarme.png) 0px 0px";></div>
-	<div id="maldonadoTemplate" style="display: none; background: url(santiago.png) 0px 0px;"></div>
-	<div id="pointsTemplate" style="display:none;"></div>
-	<div id="menuTemplate" style="display: none; position: absolute; height: 60px; width: 60px; background: url(menu.png);"></div>
+	<div class="container">
+		<canvas id ="game_canvas" stlye="display:block;"></canvas>
+	</div>
+	<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+	<script>window.mit = window.mit || {};</script>
+	<script type="text/javascript" src="js/Utilities class.js"></script>
+	<script type="text/javascript" src="js/Entity class.js"></script>
+	<script type="text/javascript" src="js/Maldonado class.js"></script>
+	<script type="text/javascript" src="js/Gendarme class.js"></script>
+	<script type="text/javascript" src="js/GameMaster.js"></script>
+	<script type="text/javascript" src="js/Points class.js"></script>
+	<script type="text/javascript" src="js/Menu class.js"></script>
+	<script type="text/javascript" src="js/Canvas class.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
 </body>

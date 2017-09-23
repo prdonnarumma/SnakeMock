@@ -6,18 +6,18 @@
 	background-color: #333;
 }
 
-.maldonado {
-	position: absolute;
-	height: 24px;
-	width: 24px;
-	background: url(santiago.png) 0px 0px;
+.container {
+	position: relative;
+	margin: 20px auto 50px;
+	width: auto;
+	max-width: 1000px;
+	height: 500px;
 }
 
-.gendarme {
-	position: absolute;
-	height: 48px;
-	width: 48px;
-	background: url(gendarme.png) 0px 0px;
+canvas#game_canvas {
+  display: block;
+  margin: 0 auto;
+  position: absolute;
 }
 
 #menu {
