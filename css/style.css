@@ -1,11 +1,3 @@
-#canvas {
-	position: relative;
-	height: 400px;
-	width: 94%;
-	margin: 50px 3%;
-	background-color: #333;
-}
-
 .container {
 	position: relative;
 	margin: 20px auto 50px;
@@ -18,36 +10,23 @@ canvas#game_canvas {
   display: block;
   margin: 0 auto;
   position: absolute;
+  z-index: 0;
 }
 
-#menu {
+#score_bar {
+	width: 150px;
+	height: 10px;
 	position: absolute;
+	top: 20px;
 	left: 50%;
-	top: 50%;
-	background-image: url(menu.png);
+	border: 1px solid #000;
+	margin-left: -75px;
+	display: inline;
+	z-index: 1;
 }
 
-.StartGame {
-	background-position: 0px 0px;
-}
-
-.Options {
-	background-position: 120px 0px;
-}
-
-.Credits {
-	background-position: 60px 0px;
-}
-
-#points {
-	position: absolute;
-	left: 50px;
-	bottom: 20px;
-	width: 50px;
-	font: 'Courier New';
-	font-weight: bold;
-	font-size: 30px;
-	text-align: center;
-	colour: white;
-	letter-spacing: 2px;
+#score_loader {
+	width: 100%; height: 100%;
+	background: #FDCF7D;
+	z-index: 3;
 }

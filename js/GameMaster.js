@@ -21,7 +21,7 @@ class GameMaster {
 	};
 
 	initializeGame() {
-		//this.points = this.createPoints();
+		this.points = this.createPoints();
 		this.addGendarme(10,10,'player');
 		this.addMaldonado(200,200,'maldonado');
 		this.addMaldonado(400,400,'maldonadobis');
@@ -29,10 +29,7 @@ class GameMaster {
 	};
 
 	createPoints() {
-		let points = new Points(50,40);
-		if (typeof this.canvas !== null) {
-			points.appendTo(this.canvas)
-		} else { throw new Error('canvas not found')}
+		let points = new Points();
 		return points;
 	};
 
@@ -99,7 +96,7 @@ class GameMaster {
 			let object = this.entity(ent);
 			if (object.classType === 'maldonado') {
 				if (Utilities.isColliding(object.bounds,player.bounds)) {
-					//this.points.addPoints(100);
+					this.points.updatePoints(20);
 					this.entityRemove(ent);
 					this.spawnMaldonado(ent);
 				}
@@ -108,10 +105,13 @@ class GameMaster {
 			}
 		}
 
-		//Update the points
-		//this.points.updatePoints();
-
-		//Update sprites
+		//Update loss condition
+		let cur_time = new Date().getTime();
+		let time_diff = cur_time - this.points.checkPoint;
+		if (time_diff > 200) {
+			this.points.updatePoints(-1);
+			this.points.checkPoint = cur_time;
+		}
 	};
 
 	startGame() {

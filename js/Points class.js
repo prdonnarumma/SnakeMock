@@ -1,24 +1,11 @@
 class Points {
 
-	constructor(width,height) {
+	constructor() {
 		this._id = "points";
-		this.createObjectElement(width,height);
-		this._amount = 0;
-	};
-
-	createObjectElement(width,height) {
-		if (typeof arguments[0] === 'number' && typeof arguments[1] === 'number') {
-			this._element = document.createElement("div");
-			this.element.id = this._id;
-			this.width = width;
-			this.height = height;
-			this.element.style.width = this.width + 'px';
-			this.element.style.height = this.height + 'px';
-		} else {throw new Error("No width and height values for the Points HTML object")}
-	};
-
-	appendTo(parent) {
-		parent.element.appendChild(this.element);
+		this._element_loader = $("#score_loader");
+		this._element_bar = $("#element_bar");
+		this._amount = 100;
+		this._checkPoint = new Date().getTime();
 	};
 
 	toggleVisibility() {
@@ -30,19 +17,20 @@ class Points {
 		}
 	};
 
-	addPoints(numb) {
-		this.amount += parseInt(numb);
+	updatePoints(points) {
+		this.amount += points;
+
+		if (this.amount > 100) {
+			this.amount = 1;
+		}
+		if (this.amount < 0) {
+			this.amount = 0;
+		}
+		this._element_loader.css('width', this.amount + '%');
 	};
 
-	updatePoints() {
-		this.element.innerText = this.amount;
-	};
-
-	get amount ()			  { return this._amount;										}
-	set amount (numb)		  { this._amount = numb;										}
-	get elementWidth () 	  { return this.element.clientWidth;							}
-	set elementWidth (width)  { this.element.clientWidth = width;							}
-	get elementHeight ()	  { return this.element.clientHeight;							}
-	set elementHeight (height){ this.element.clientHeight = height;							}
-	get element () 			  { return this._element										}
+	get amount ()		{ return this._amount;		}
+	set amount (q)		{ this._amount = q;			}
+	get checkPoint()	{ return this._checkPoint;	}
+	set checkPoint(cp)  { this._checkPoint = cp;	}
 }
