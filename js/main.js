@@ -1,111 +1,124 @@
-mit.main = function() {
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 
-	// rAF
-	window.requestAnimationFrame = function() {
-		return window.requestAnimationFrame ||
-		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame ||
-		window.msRequestAnimationFrame ||
-		window.oRequestAnimationFrame ||
-		function(f) {
-			window.setTimeout(f,1e3/60);
-		}
-	}();
+// requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
 
-  	// cAF
-  	window.cancelAnimationFrame = function() {
-  		return window.cancelAnimationFrame ||
-  		window.webkitCancelAnimationFrame ||
-  		window.mozCancelAnimationFrame ||
-  		window.msCancelAnimationFrame ||
-  		window.oCancelAnimationFrame ||
-  		function(f) {
-  			window.setTimeout(f,1e3/60);
-  		}
-  	}();
+// MIT license
 
-	/*
- 	* GameMaster initiation
- 	*/
-	var gamemaster = new GameMaster();
-	/*
-	* Canvas Initiation
-	*/
-	
-	var canvas = document.querySelector('#game_canvas');
-	var ctx = canvas.getContext('2d');
+(function () {
+    var lastTime = 0;
+    var vendors  = ['ms', 'moz', 'webkit', 'o'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame  = window[vendors[x] + 'CancelAnimationFrame']
+            || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
 
-	var ui = {
-		body: $('body'),
-	};
+    if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function (callback, element) {
+            var currTime   = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id         = window.setTimeout(function () {
+                    callback(currTime + timeToCall);
+                },
+                timeToCall);
+            lastTime       = currTime + timeToCall;
+            return id;
+        };
+    }
 
-	var W = canvas.width = ui.body.width();
-  	var H = canvas.height = ui.body.height();
+    if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function (id) {
+            clearTimeout(id);
+        };
+    }
+}());
 
-	// Width x Height capped to 1000 x 500
-	if (canvas.width > 1000) {
-		W = canvas.width = 1000;
-	}
-	if (canvas.height > 500) {
-		H = canvas.height = 500;
-	}
+(function ($) {
+    "use strict";
 
-	// Resizing Width/Height
-	if (canvas.height < 500) {
-		canvas.width = canvas.height * 1000/500;
-	}
-	if (canvas.width < 1000) {
-		canvas.height = canvas.width * 500/1000;
-	}
+    // FPS for updating the game
+    var FPS = 60;
 
-	(function() {
-		gamemaster.initializeMenu();
-	}());
-//Check out the speed of rendering
-//Should code the loader
-	var stop = false;
-	var frameCount = 0;
-	var $results = $("#results");
-	var fps, fpsInterval, startTime, now, then, elapsed;
+    // initialize variables
+    var width, height, fpsInterval, startTime, now, then, elapsed;
 
+    /*
+     * Canvas Initiation
+     */
+    var canvas = document.getElementById('game_canvas');
+    var ctx    = canvas.getContext('2d');
 
-	// initialize the timer variables and start the animation
+    // Initialize the game master
+    var gameMaster = new GameMaster();
 
-	function startAnimating(fps) {
-	    fpsInterval = 1000 / fps;
-	    then = Date.now();
-	    startTime = then;
-	    animate();
-	};
+    function resizeCanvas() {
+        var $body = $('body');
 
-	function animate() {
-	    // request another frame
-	    requestAnimationFrame(animate);
+        width = canvas.width = $body.width();
+        height = canvas.height = $body.height();
 
-	    // calc elapsed time since last loop
-	    now = Date.now();
-	    elapsed = now - then;
+        // Width x Height capped to 1000 x 500
+        if (canvas.width > 1000) {
+            width = canvas.width = 1000;
+        }
+        if (canvas.height > 500) {
+            height = canvas.height = 500;
+        }
 
-	    // if enough time has elapsed, draw the next frame
-	    if (elapsed > fpsInterval) {
+        // Resizing Width/Height
+        if (canvas.height < 500) {
+            canvas.width = canvas.height * 1000 / 500;
+        }
 
-	        // Get ready for next frame by setting then=now, but also adjust for your
-	        // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
-	        then = now - (elapsed % fpsInterval);
+        if (canvas.width < 1000) {
+            canvas.height = canvas.width * 500 / 1000;
+        }
+    }
 
-	        // Put your drawing code here
-	        ctx.clearRect(0, 0, W, H);
-			/*
-			*	Update every object sprite
-			*/
+    /**
+     * Starts animating the game
+     */
+    function startAnimating() {
+        fpsInterval = Math.floor(1000 / FPS);
+        then        = Date.now();
+        startTime   = then;
+        animate();
+    }
 
-			if (gamemaster.gameState === 'Menu') {
-				gamemaster.updateMenu(ctx);
-			} else {
-				gamemaster.updateGame(ctx);
-			}
-	    }
-	};
+    /**
+     * Main function running the game animation
+     */
+    function animate() {
+        //console.log('animate');
+        // request another frame
+        requestAnimationFrame(animate);
 
-	startAnimating(30);
-}()
+        // calc elapsed time since last loop
+        now     = Date.now();
+        elapsed = now - then;
+
+        // if enough time has elapsed, draw the next frame
+        if (elapsed > fpsInterval) {
+
+            // Get ready for next frame by setting then=now, but also adjust for your
+            // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+            then = now - (elapsed % fpsInterval);
+
+            ctx.clearRect(0, 0, width, height);
+
+            if (gameMaster.gameState === 'Menu') {
+                gameMaster.updateMenu(ctx);
+            } else {
+                gameMaster.updateGame(ctx);
+            }
+        }
+    }
+
+    // Start it all!
+    resizeCanvas();
+    gameMaster.initializeMenu();
+    gameMaster.init();
+    startAnimating();
+
+})(window.jQuery);
